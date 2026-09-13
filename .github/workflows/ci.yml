@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: redrope
+          POSTGRES_PASSWORD: redrope
+          POSTGRES_DB: redrope
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U redrope" --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgres://redrope:redrope@localhost:5432/redrope
+      SESSION_SECRET: ci-secret
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      ADMIN_EMAILS: admin@redrope.local
+      EMAIL_PROVIDER: console
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run db:migrate
+      - run: npm run db:seed
+      - run: npm run build

@@ -1,0 +1,125 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --color-rope-50: #fdf3f2;
+  --color-rope-100: #fbe4e2;
+  --color-rope-200: #f6c9c5;
+  --color-rope-300: #eea19b;
+  --color-rope-400: #e26b63;
+  --color-rope-500: #cf4238;
+  --color-rope-600: #b3261e;
+  --color-rope-700: #931d18;
+  --color-rope-800: #791b18;
+  --color-rope-900: #641b19;
+  --color-rope-950: #370a08;
+
+  --color-ink-50: #f8f7f5;
+  --color-ink-100: #efede9;
+  --color-ink-200: #dedad3;
+  --color-ink-300: #c6c0b6;
+  --color-ink-400: #a69e91;
+  --color-ink-500: #8c8375;
+  --color-ink-600: #746c60;
+  --color-ink-700: #5f584e;
+  --color-ink-800: #4f4942;
+  --color-ink-900: #2f2b27;
+  --color-ink-950: #1c1916;
+
+  --color-gold-100: #f8efd9;
+  --color-gold-300: #e6c880;
+  --color-gold-500: #c9a24a;
+  --color-gold-700: #8d6a1f;
+
+  --color-sage-100: #e8f0e8;
+  --color-sage-500: #5e8a5e;
+  --color-sage-700: #3f6440;
+
+  --shadow-card: 0 1px 2px rgb(28 25 22 / 0.06), 0 8px 24px -12px rgb(28 25 22 / 0.18);
+  --shadow-pop: 0 12px 40px -12px rgb(28 25 22 / 0.35);
+  --radius-xl2: 1.25rem;
+}
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-ink-50 text-ink-900 antialiased;
+  font-feature-settings: "ss01", "cv11";
+}
+
+::selection {
+  background: var(--color-rope-200);
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-variation-settings: "opsz" 144, "SOFT" 30;
+}
+
+@utility container-page {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+@utility card {
+  @apply rounded-2xl border border-ink-200/70 bg-white shadow-card;
+}
+
+@utility input {
+  @apply w-full rounded-xl border border-ink-200 bg-white px-3.5 py-2.5 text-[15px] text-ink-900 placeholder:text-ink-400 outline-none transition focus:border-rope-400 focus:ring-4 focus:ring-rope-100 disabled:bg-ink-50 disabled:text-ink-500;
+}
+
+@utility label {
+  @apply mb-1.5 block text-[13px] font-medium text-ink-700;
+}
+
+@utility btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-[15px] font-medium transition focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-rope-100 disabled:cursor-not-allowed disabled:opacity-60;
+}
+@utility btn-primary {
+  @apply btn bg-rope-600 text-white shadow-sm hover:bg-rope-700 active:bg-rope-800;
+}
+@utility btn-secondary {
+  @apply btn border border-ink-200 bg-white text-ink-900 hover:border-ink-300 hover:bg-ink-50;
+}
+@utility btn-ghost {
+  @apply btn text-ink-700 hover:bg-ink-100;
+}
+@utility btn-dark {
+  @apply btn bg-ink-900 text-white hover:bg-ink-950;
+}
+@utility btn-sm {
+  @apply px-3 py-1.5 text-[13px] rounded-lg;
+}
+
+@utility chip {
+  @apply inline-flex items-center gap-1 rounded-full border border-ink-200 bg-white px-3 py-1 text-[13px] font-medium text-ink-700 transition hover:border-ink-300;
+}
+@utility chip-active {
+  @apply border-ink-900 bg-ink-900 text-white hover:border-ink-900;
+}
+
+@utility badge {
+  @apply inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-[12px] font-medium;
+}
+
+.prose-rr p + p {
+  margin-top: 0.75rem;
+}
+
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fade-up 0.35s ease-out both; }
+
+.scrollbar-none::-webkit-scrollbar { display: none; }
+.scrollbar-none { scrollbar-width: none; }
