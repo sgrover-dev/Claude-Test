@@ -54,4 +54,4 @@ Optional integrations (everything degrades gracefully without them):
 
 The CSV format is the research sheet in `data/imports/houston-venues.csv` (one row per space; restaurant columns repeated; blank `space_name` rows are restaurant-level notes). Column aliases are accepted (`restaurant`, `space`, `seated`, `standing`, `features`, `sources`…). Pricing text is parsed conservatively into minimums / per-person / room fees / day-part minimums, amenities text is mapped to taxonomy keys, and every derived number is stored with provenance. Import from the console (`/admin/ingestion`, with review) or from the CLI (`npm run db:seed path/to.csv`, direct apply).
 
-See [ARCHITECTURE.md](./ARCHITECTURE.md) for the data model, ranking, quote normalization, the ingestion pipeline and what is deliberately deferred.
+See [DEPLOY.md](./DEPLOY.md) for Supabase + Vercel steps and [ARCHITECTURE.md](./ARCHITECTURE.md) for the data model, ranking, quote normalization, the ingestion pipeline and what is deliberately deferred.
