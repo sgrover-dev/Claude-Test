@@ -42,3 +42,5 @@ yarn-error.log*
 next-env.d.ts
 storage/
 e2e-shots/
+scripts/artifact/rr.js
+scripts/artifact/spaces.json

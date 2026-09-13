@@ -1,0 +1,413 @@
+<title>Red Rope Houston</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Geist:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#f8f7f5;--paper:#fff;--ink:#1c1916;--ink2:#5f584e;--ink3:#a69e91;--line:#e3dfd8;--rope:#b3261e;--rope2:#931d18;--ropesoft:#fbe4e2;--gold:#8d6a1f;--goldsoft:#f8efd9;--sage:#3f6440;--sagesoft:#e8f0e8;--shadow:0 8px 24px -12px rgba(28,25,22,.25);--hero:#1c1916}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#171412;--paper:#211d1a;--ink:#f3efe9;--ink2:#c6bfb4;--ink3:#8c8375;--line:#38322c;--rope:#e26b63;--rope2:#f08a82;--ropesoft:#3a1512;--gold:#e6c880;--goldsoft:#2f2612;--sage:#9cc49c;--sagesoft:#1c2a1c;--shadow:0 8px 24px -12px rgba(0,0,0,.6);--hero:#0f0d0c}}
+:root[data-theme="dark"]{--bg:#171412;--paper:#211d1a;--ink:#f3efe9;--ink2:#c6bfb4;--ink3:#8c8375;--line:#38322c;--rope:#e26b63;--rope2:#f08a82;--ropesoft:#3a1512;--gold:#e6c880;--goldsoft:#2f2612;--sage:#9cc49c;--sagesoft:#1c2a1c;--shadow:0 8px 24px -12px rgba(0,0,0,.6);--hero:#0f0d0c}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Geist",system-ui,-apple-system,sans-serif;font-size:15px;line-height:1.5;padding-block:0 84px}
+h1,h2,h3{font-family:"Fraunces",Georgia,serif;font-weight:500;margin:0;line-height:1.12;text-wrap:balance}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+.app{max-width:560px;margin:0 auto;min-height:100vh}
+.view{display:none;padding:0 16px}.view.on{display:block}
+.top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:14px 0 10px}
+.brand{display:flex;align-items:center;gap:8px;font-family:"Fraunces",Georgia,serif;font-size:19px;text-decoration:none}
+.brand i{width:22px;height:22px;border-radius:50%;background:var(--rope);position:relative;display:inline-block}.brand i::after{content:"";position:absolute;inset:5.5px;border:2.5px solid rgba(255,255,255,.92);border-radius:50%}
+.pill{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:600;padding:3px 8px;border-radius:999px;background:var(--goldsoft);color:var(--gold)}
+.hero{background:var(--hero);color:#fff;margin:0 -16px;padding:26px 16px 22px;background-image:radial-gradient(ellipse at top left,rgba(179,38,30,.6),transparent 55%),radial-gradient(ellipse at bottom right,rgba(201,162,74,.25),transparent 50%)}
+.hero .eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#e6c880;margin:0 0 8px}
+.hero h1{font-size:34px;font-weight:600;color:#fff}
+.hero p{color:rgba(255,255,255,.75);margin:10px 0 16px;max-width:36ch;font-size:15px}
+.seg{display:inline-flex;background:rgba(255,255,255,.12);border-radius:999px;padding:3px;margin-bottom:10px}
+.seg button{border:0;background:transparent;color:rgba(255,255,255,.8);padding:6px 12px;border-radius:999px;font-size:13px;font-weight:500}
+.seg button.on{background:#fff;color:#1c1916}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:16px}
+.form{padding:10px;display:grid;gap:8px}
+.field{display:flex;flex-direction:column;gap:2px;padding:8px 10px;border-radius:10px;background:var(--bg)}
+.field label{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+.field input,.field select,.field textarea{border:0;background:transparent;padding:2px 0;font-size:15px;font-weight:500;outline:none;width:100%;min-height:26px}
+.field textarea{font-weight:400;resize:none;line-height:1.45}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:12px;padding:12px 16px;font-weight:600;font-size:15px;cursor:pointer;text-decoration:none;min-height:44px}
+.btn.primary{background:var(--rope);color:#fff}.btn.primary:active{background:var(--rope2)}
+.btn.dark{background:var(--ink);color:var(--bg)}
+.btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+.btn.sm{padding:8px 12px;font-size:13px;min-height:36px;border-radius:10px}
+.btn.block{width:100%}
+.btn:disabled{opacity:.55;cursor:default}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips.scroll{flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;margin:0 -16px;padding-left:16px;padding-right:16px;scrollbar-width:none}.chips.scroll::-webkit-scrollbar{display:none}
+.chip{border:1px solid var(--line);background:var(--paper);color:var(--ink2);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:500;white-space:nowrap;min-height:34px}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.section{margin-top:26px}.section h2{font-size:22px;margin-bottom:4px}.section .sub{color:var(--ink2);font-size:14px;margin:0 0 12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.tile{padding:12px;text-decoration:none;display:flex;justify-content:space-between;align-items:center;font-weight:500;font-size:14px}
+.tile span{color:var(--ink3);font-size:12px;font-variant-numeric:tabular-nums}
+.space{overflow:hidden;margin-bottom:12px}
+.space .img{height:150px;position:relative;background:linear-gradient(135deg,#b3261e,#4f4942)}
+.space .img.patio,.space .img.rooftop{background:linear-gradient(135deg,#5e8a5e,#c9a24a)}
+.space .img.wine_room{background:linear-gradient(135deg,#791b18,#cf4238)}
+.space .img.bar_lounge{background:linear-gradient(135deg,#2f2b27,#746c60)}
+.space .img.full_buyout{background:linear-gradient(135deg,#931d18,#2f2b27)}
+.space .img::after{content:"";position:absolute;inset:0;opacity:.25;background:radial-gradient(circle at 20% 20%,#fff,transparent 45%),radial-gradient(circle at 80% 70%,#fff,transparent 40%)}
+.space .img .tag{position:absolute;left:10px;top:10px;z-index:1;display:flex;gap:6px}
+.space .img .tag span,.space .img .nophoto{background:rgba(0,0,0,.35);color:#fff;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:3px 7px;border-radius:6px;backdrop-filter:blur(4px)}
+.space .img .nophoto{position:absolute;left:10px;bottom:10px;z-index:1}
+.space .body{padding:12px 14px 14px}
+.space h3{font-size:20px}
+.space .rest{color:var(--ink2);font-size:14px;margin:2px 0 8px}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13.5px}
+.kv div{background:var(--bg);border-radius:10px;padding:7px 10px}.kv b{display:block;font-weight:600}.kv small{color:var(--ink3);font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+.badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.badge{font-size:11.5px;font-weight:600;padding:3px 8px;border-radius:7px;background:var(--bg);color:var(--ink2)}
+.badge.sage{background:var(--sagesoft);color:var(--sage)}.badge.gold{background:var(--goldsoft);color:var(--gold)}.badge.rope{background:var(--ropesoft);color:var(--rope)}.badge.out{border:1px solid var(--line);background:transparent}
+.why{margin:8px 0 0;padding:0;list-style:none;font-size:12.5px;display:grid;gap:2px}
+.why li{color:var(--sage)}.why li.warn{color:var(--gold)}
+.actions{display:flex;gap:8px;margin-top:12px}
+.actions .btn{flex:1}
+.nav{position:fixed;bottom:0;left:0;right:0;background:var(--paper);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:6px 8px calc(6px + env(safe-area-inset-bottom));z-index:20}
+.nav button{border:0;background:transparent;color:var(--ink3);font-size:11px;font-weight:600;display:flex;flex-direction:column;align-items:center;gap:3px;padding:4px 10px;min-width:64px;border-radius:10px;position:relative}
+.nav button.on{color:var(--rope)}
+.nav svg{width:22px;height:22px}
+.nav .count{position:absolute;top:0;right:8px;background:var(--rope);color:#fff;font-size:10px;border-radius:999px;min-width:16px;height:16px;display:flex;align-items:center;justify-content:center;padding:0 4px}
+.back{display:inline-flex;align-items:center;gap:6px;border:0;background:transparent;color:var(--ink2);padding:10px 0;font-size:14px}
+.detail h1{font-size:30px;font-weight:600;margin-top:4px}
+.detail .rest{font-size:15px;color:var(--ink2);margin:4px 0 12px}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.facts div{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:8px 10px}.facts small{display:block;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}.facts b{font-size:17px;font-weight:600}
+.block{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:14px}
+.block h2{font-size:18px;margin-bottom:8px}
+.block p{margin:0;font-size:14.5px;color:var(--ink2)}
+.list{margin:0;padding:0;list-style:none;display:grid;gap:5px;font-size:14.5px}
+.list li::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--rope);margin-right:8px;vertical-align:middle}
+.price{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--line);font-size:14.5px}.price:last-child{border:0}
+.price .lbl{color:var(--ink2)}
+.conf{font-size:10px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;padding:2px 6px;border-radius:5px;margin-left:6px;vertical-align:middle;background:var(--bg);color:var(--ink3)}
+.conf.verified{background:var(--sagesoft);color:var(--sage)}.conf.publicly_listed{background:var(--bg);color:var(--ink2)}.conf.estimate{background:var(--goldsoft);color:var(--gold)}
+.est{margin-top:12px;background:var(--goldsoft);border-radius:12px;padding:10px 12px}
+.est .big{font-family:"Fraunces",Georgia,serif;font-size:24px;text-align:right}
+.est .lbl{font-size:12.5px;color:var(--gold);font-weight:600}
+.est details{font-size:12.5px;color:var(--ink2);margin-top:4px}.est summary{cursor:pointer;color:var(--gold)}
+.sticky{position:sticky;bottom:calc(72px + env(safe-area-inset-bottom));background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:10px;margin-top:16px;box-shadow:var(--shadow);display:flex;gap:8px;z-index:5}
+.sticky .btn{flex:1}
+.dl{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:14px}.dl dt{color:var(--ink3);font-size:12px;letter-spacing:.06em;text-transform:uppercase;padding-top:2px}.dl dd{margin:0}
+.msg{background:var(--ropesoft);color:var(--rope);border-radius:12px;padding:10px 12px;font-size:13.5px;margin:10px 0}
+.msg.ok{background:var(--sagesoft);color:var(--sage)}
+.progress{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;font-size:10px;text-align:center;color:var(--ink3);margin:12px 0}
+.progress i{display:block;height:5px;border-radius:999px;background:var(--line);margin-bottom:4px}.progress .done i{background:var(--rope)}.progress .done{color:var(--ink);font-weight:600}
+.compare{overflow-x:auto;margin:0 -16px;padding:0 16px}
+.compare table{border-collapse:collapse;min-width:520px;font-size:13px;background:var(--paper);border:1px solid var(--line);border-radius:14px}
+.compare th,.compare td{padding:8px 10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+.compare th{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink3);font-weight:600;white-space:nowrap}
+.compare thead th{font-family:"Fraunces",Georgia,serif;font-size:16px;text-transform:none;letter-spacing:0;color:var(--ink)}
+.empty{text-align:center;padding:40px 16px;color:var(--ink2)}.empty h2{font-size:22px;margin-bottom:6px}
+.req{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 14px;margin-bottom:8px;text-decoration:none}
+.req b{display:block;font-weight:600}.req small{color:var(--ink2)}
+.toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:999px;font-size:13.5px;box-shadow:var(--shadow);z-index:30;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.on{opacity:1}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid currentColor;border-right-color:transparent;border-radius:50%;animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}.toast{transition:none}}
+.foot{margin-top:28px;color:var(--ink3);font-size:12px;text-align:center}
+</style>
+
+<div class="app">
+  <!-- HOME -->
+  <section class="view on" id="v-home">
+    <div class="top"><a class="brand" href="#/"><i></i>Red Rope</a><span class="pill">Houston prototype</span></div>
+    <div class="hero">
+      <p class="eyebrow">Private dining &#183; patios &#183; wine rooms &#183; buyouts</p>
+      <h1>Find a restaurant space for your group.</h1>
+      <p>Real Houston inventory, searched by capacity, privacy and price. Pick a space and Red Rope handles the restaurant.</p>
+      <div class="seg" role="tablist"><button class="on" id="seg-search" type="button">Search</button><button id="seg-ask" type="button">Tell Red Rope</button></div>
+      <form class="card form" id="f-search">
+        <div class="field"><label for="s-hood">Where</label><select id="s-hood"><option value="">Anywhere in Houston</option></select></div>
+        <div class="row2">
+          <div class="field"><label for="s-date">Date</label><input id="s-date" type="date"></div>
+          <div class="field"><label for="s-time">Start time</label><input id="s-time" type="time" step="900"></div>
+        </div>
+        <div class="field"><label for="s-guests">Guests</label><input id="s-guests" type="number" inputmode="numeric" min="1" placeholder="25"></div>
+        <button class="btn primary block" type="submit">Search spaces</button>
+      </form>
+      <form class="card form" id="f-ask" hidden>
+        <div class="field"><label for="ask-text">What do you need?</label><textarea id="ask-text" rows="3" placeholder="Nice but not stuffy near the Galleria for 20 people next Tuesday. Need a screen. Around $100/person."></textarea></div>
+        <div class="chips" id="ask-examples"></div>
+        <button class="btn primary block" type="submit" id="ask-go">Find spaces</button>
+        <p id="ask-note" style="margin:0;font-size:12px;color:var(--ink3)"></p>
+      </form>
+    </div>
+
+    <div class="section"><h2>Where in Houston?</h2><p class="sub">Neighborhoods with listed spaces.</p><div class="grid2" id="home-hoods"></div></div>
+    <div class="section"><h2>What are you hosting?</h2><div class="chips" id="home-occasions"></div></div>
+    <div class="section"><h2>Spaces worth a look</h2><p class="sub">The most complete listings right now.</p><div id="home-featured"></div></div>
+    <p class="foot">Inventory from public restaurant materials and Red Rope research. Facts are labelled verified, listed, or estimate.</p>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="view" id="v-results">
+    <div class="top"><button class="back" id="r-back" type="button">&#8592; Home</button><a class="brand" href="#/"><i></i></a></div>
+    <div id="r-concierge" hidden class="msg"></div>
+    <h1 id="r-title" style="font-size:24px">Spaces</h1>
+    <p class="sub" id="r-sub" style="color:var(--ink2);margin:2px 0 10px;font-size:14px"></p>
+    <div class="chips scroll" id="r-filters"></div>
+    <div class="chips scroll" id="r-sort" style="margin-top:6px"></div>
+    <div id="r-list" style="margin-top:12px"></div>
+    <div id="r-nearby"></div>
+  </section>
+
+  <!-- DETAIL -->
+  <section class="view detail" id="v-detail"></section>
+
+  <!-- COMPARE -->
+  <section class="view" id="v-compare">
+    <div class="top"><h1 style="font-size:26px">Compare</h1><span class="pill" id="c-count"></span></div>
+    <div id="c-body"></div>
+  </section>
+
+  <!-- INQUIRE -->
+  <section class="view" id="v-inquire"></section>
+
+  <!-- REQUESTS -->
+  <section class="view" id="v-requests">
+    <div class="top"><h1 style="font-size:26px">Your requests</h1></div>
+    <div id="q-body"></div>
+  </section>
+</div>
+
+<nav class="nav" aria-label="Main">
+  <button data-nav="#/" id="n-home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>Search</button>
+  <button data-nav="#/compare" id="n-compare"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="7" height="16" rx="1.5"/><rect x="14" y="4" width="7" height="16" rx="1.5"/></svg>Compare<span class="count" id="n-ccount" hidden></span></button>
+  <button data-nav="#/requests" id="n-requests"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h16v11H8l-4 4z"/></svg>Requests<span class="count" id="n-rcount" hidden></span></button>
+</nav>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="rr.js"></script>
+<script>
+(function(){
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const T=RR.taxonomy, fmt=RR.formatCents;
+function roundEst(e){const r=v=>v==null?v:Math.round(v/100)*100;return {...e,lowCents:r(e.lowCents),highCents:r(e.highCents),perPersonLowCents:r(e.perPersonLowCents),perPersonHighCents:r(e.perPersonHighCents)}}
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const label=(opts,k)=>T.labelFor(opts,k);
+let DATA={neighborhoods:[],spaces:[]}, byId={}, bySlug={};
+let filters={city:"houston",sort:"relevance"}, concierge=null;
+let compare=load("rr.compare",[]), requests=load("rr.requests",[]), saved=load("rr.saved",[]);
+let dbp=null; // db capability promise
+function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch{return d}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove("on"),1800)}
+
+/* ---------- routing ---------- */
+function go(h){location.hash=h}
+function route(){
+  const h=location.hash||"#/";
+  const [path,qs]=h.slice(1).split("?");
+  const p=new URLSearchParams(qs||"");
+  $$(".view").forEach(v=>v.classList.remove("on"));
+  $$(".nav button").forEach(b=>b.classList.remove("on"));
+  window.scrollTo(0,0);
+  if(path==="/search"){filters=fromParams(p);renderResults();$("#v-results").classList.add("on");$("#n-home").classList.add("on")}
+  else if(path.startsWith("/space/")){renderDetail(path.split("/")[2]);$("#v-detail").classList.add("on");$("#n-home").classList.add("on")}
+  else if(path==="/compare"){renderCompare();$("#v-compare").classList.add("on");$("#n-compare").classList.add("on")}
+  else if(path==="/inquire"){renderInquire(p);$("#v-inquire").classList.add("on");$("#n-requests").classList.add("on")}
+  else if(path==="/requests"){renderRequests();$("#v-requests").classList.add("on");$("#n-requests").classList.add("on")}
+  else{$("#v-home").classList.add("on");$("#n-home").classList.add("on")}
+}
+const ARR=["privacy","cuisines","ambiance","foodStyles","indoorOutdoor","amenities","spaceTypes"], BOOL=["budgetPerPerson","avRequired","displayRequired","accessible","parking","alcohol","privateBar"], NUM=["guests","budgetCents","durationMinutes","maxMinimumCents"];
+function toParams(f){const p=new URLSearchParams();for(const [k,v] of Object.entries(f)){if(v==null||v===""||v===false||k==="city")continue;if(Array.isArray(v)){if(v.length)p.set(k,v.join(","))}else if(v===true)p.set(k,"1");else p.set(k,String(v))}return p}
+function fromParams(p){const f={city:"houston"};for(const [k,v] of p){if(ARR.includes(k))f[k]=v.split(",").filter(Boolean);else if(BOOL.includes(k))f[k]=v==="1";else if(NUM.includes(k))f[k]=parseInt(v,10)||undefined;else f[k]=v}if(!f.sort)f.sort="relevance";return f}
+function searchHref(f){const q=toParams(f).toString();return "#/search"+(q?"?"+q:"")}
+
+/* ---------- home ---------- */
+function initHome(){
+  const sel=$("#s-hood");
+  const counts={};DATA.spaces.forEach(s=>{if(s.neighborhoodSlug)counts[s.neighborhoodSlug]=(counts[s.neighborhoodSlug]||0)+1});
+  DATA.neighborhoods.forEach(n=>{const o=document.createElement("option");o.value=n.slug;o.textContent=n.name;sel.appendChild(o)});
+  $("#home-hoods").innerHTML=DATA.neighborhoods.filter(n=>counts[n.slug]).sort((a,b)=>counts[b.slug]-counts[a.slug]).map(n=>`<a class="card tile" href="${searchHref({neighborhood:n.slug})}">${esc(n.name)}<span>${counts[n.slug]} spaces</span></a>`).join("");
+  $("#home-occasions").innerHTML=T.OCCASION_PAGES.map(o=>`<a class="chip" href="${searchHref({eventType:o.eventTypes[0],privacy:o.privacy,spaceTypes:o.spaceTypes})}">${esc(o.title)}</a>`).join("");
+  const featured=[...DATA.spaces].sort((a,b)=>b.completenessScore-a.completenessScore).slice(0,4);
+  $("#home-featured").innerHTML=featured.map(s=>card({space:s})).join("");
+  $("#seg-search").onclick=()=>{$("#seg-search").classList.add("on");$("#seg-ask").classList.remove("on");$("#f-search").hidden=false;$("#f-ask").hidden=true};
+  $("#seg-ask").onclick=()=>{$("#seg-ask").classList.add("on");$("#seg-search").classList.remove("on");$("#f-search").hidden=true;$("#f-ask").hidden=false;$("#ask-text").focus()};
+  $("#f-search").onsubmit=e=>{e.preventDefault();concierge=null;go(searchHref({neighborhood:$("#s-hood").value||undefined,date:$("#s-date").value||undefined,startTime:$("#s-time").value||undefined,guests:parseInt($("#s-guests").value,10)||undefined}))};
+  const EX=["Nice but not stuffy near the Galleria for a 20-person management dinner next Tuesday. Need a screen. Around $100/person.","Casual cocktail party for about 30 around Montrose. Our own area but not total privacy. Maybe $2,500.","Rehearsal dinner for 40 in the Heights on a Friday, family-style, under $4k."];
+  $("#ask-examples").innerHTML=EX.map((x,i)=>`<button type="button" class="chip" data-ex="${i}">Example ${i+1}</button>`).join("");
+  $$("#ask-examples button").forEach(b=>b.onclick=()=>{$("#ask-text").value=EX[+b.dataset.ex]});
+  $("#f-ask").onsubmit=async e=>{e.preventDefault();const text=$("#ask-text").value.trim();if(!text)return;const btn=$("#ask-go");btn.disabled=true;btn.innerHTML='<span class="spin"></span> Interpreting\u2026';
+    try{const r=await interpret(text);concierge={text,summary:r.summary,unresolved:r.unresolved,provider:r.provider};go(searchHref(r.filters))}
+    finally{btn.disabled=false;btn.textContent="Find spaces"}};
+}
+async function interpret(text){
+  const fb=RR.interpretRequestFallback(text,DATA.neighborhoods);
+  let sample=null;try{sample=await Promise.race([claude.use("sample"),new Promise(r=>setTimeout(()=>r(null),1500))])}catch{}
+  if(sample){
+    try{
+      const schema={summary:"string",neighborhood:"slug from list or null",date:"YYYY-MM-DD or null",startTime:"HH:MM or null",guests:"int or null",eventType:"key or null",budgetCents:"int or null",budgetPerPerson:"bool or null",privacy:["fully_private|semi_private|shared|buyout"],cuisines:["key"],ambiance:["key"],foodStyles:["key"],indoorOutdoor:["indoor|outdoor|covered_outdoor|mixed"],amenities:["key"],avRequired:"bool",displayRequired:"bool",privateBar:"bool",parking:"bool",accessible:"bool",format:"seated|standing|null",durationMinutes:"int or null",spaceTypes:["key"],unresolved:["string"]};
+      const prompt=`You are Red Rope's concierge for restaurant event spaces in Houston. Turn the request into search filters. Only extract what is stated; use null/empty otherwise. Today is ${new Date().toISOString().slice(0,10)}. "$100/person" \u2192 budgetCents 10000, budgetPerPerson true. A screen/TV/projector/presentation \u2192 displayRequired and avRequired true. "Own area but not total privacy" \u2192 ["semi_private","fully_private"]. Neighborhood slugs: ${DATA.neighborhoods.map(n=>n.slug+" ["+[n.name,...n.aliases].join(", ")+"]").join("; ")}. eventType keys: ${T.EVENT_TYPES.map(e=>e.key).join(", ")}. cuisines: ${T.CUISINES.map(e=>e.key).join(", ")}. ambiance: ${T.AMBIANCE.map(e=>e.key).join(", ")}. foodStyles: ${T.FOOD_STYLES.map(e=>e.key).join(", ")}. amenities: ${T.AMENITIES.map(e=>e.key).join(", ")}. spaceTypes: ${T.SPACE_TYPES.map(e=>e.key).join(", ")}. Return ONLY JSON with exactly this shape: ${JSON.stringify(schema)}\n\nRequest: ${text}`;
+      const j=await sample.json(prompt,{modelTier:"quick"});
+      const merged={...fb,...j};for(const k of ARR)if(!Array.isArray(merged[k]))merged[k]=[];merged.unresolved=Array.isArray(merged.unresolved)?merged.unresolved:[];
+      return {...merged,filters:RR.toFilters(merged),provider:"claude"};
+    }catch(e){ /* fall back */ }
+  }
+  return {...fb,filters:RR.toFilters(fb),provider:"rules"};
+}
+
+/* ---------- results ---------- */
+function ctx(){const h=filters.neighborhood?DATA.neighborhoods.find(n=>n.slug===filters.neighborhood):null;return {origin:h?{lat:h.lat,lng:h.lng}:null,defaultTaxPct:8.25}}
+function runSearch(){
+  let pool=DATA.spaces;
+  const g=filters.guests;
+  if(g)pool=pool.filter(s=>(s.maxSeated==null&&s.maxStanding==null)||(s.maxSeated!=null&&s.maxSeated*1.1>=g)||(s.maxStanding!=null&&s.maxStanding*1.1>=g));
+  const all=RR.rankSpaces(pool,filters,ctx());
+  const inHood=filters.neighborhood?all.filter(r=>r.space.neighborhoodSlug===filters.neighborhood):all;
+  const nearby=filters.neighborhood?all.filter(r=>r.space.neighborhoodSlug!==filters.neighborhood).slice(0,8):[];
+  return {results:inHood,nearby};
+}
+function renderResults(){
+  const {results,nearby}=runSearch();
+  const hood=DATA.neighborhoods.find(n=>n.slug===filters.neighborhood);
+  $("#r-title").textContent=[filters.guests?`Spaces for ${filters.guests}`:"Restaurant spaces",filters.eventType?`for a ${label(T.EVENT_TYPES,filters.eventType).toLowerCase()}`:"",hood?`in ${hood.name}`:"in Houston"].filter(Boolean).join(" ");
+  $("#r-sub").textContent=`${results.length} ${results.length===1?"space":"spaces"}${filters.date?" \u00b7 availability confirmed on request":""}`;
+  const c=$("#r-concierge");
+  if(concierge){c.hidden=false;c.innerHTML=`<b>Red Rope heard:</b> ${esc(concierge.summary)}${concierge.unresolved.length?`<br><span style="color:var(--gold)">${esc(concierge.unresolved.join(" "))}</span>`:""}<br><span style="opacity:.75;font-size:12px">${concierge.provider==="claude"?"Interpreted by Claude":"Rule-based interpretation"} \u00b7 adjust any chip below.</span>`}else c.hidden=true;
+  const chips=[
+    ...T.PRIVACY_LEVELS.map(p=>chip(p.label,(filters.privacy||[]).includes(p.key),()=>toggleArr("privacy",p.key))),
+    chip("Screen / TV",!!filters.displayRequired,()=>set("displayRequired",!filters.displayRequired)),
+    chip("AV",!!filters.avRequired,()=>set("avRequired",!filters.avRequired)),
+    chip("Private bar",!!filters.privateBar,()=>set("privateBar",!filters.privateBar)),
+    chip("Outdoor",(filters.indoorOutdoor||[]).length>0,()=>set("indoorOutdoor",(filters.indoorOutdoor||[]).length?undefined:["outdoor","covered_outdoor"])),
+    chip("Parking",!!filters.parking,()=>set("parking",!filters.parking)),
+    chip("Accessible",!!filters.accessible,()=>set("accessible",!filters.accessible)),
+    chip(filters.budgetCents?`Budget ${fmt(filters.budgetCents)}${filters.budgetPerPerson?"/pp":""}`:"Budget",!!filters.budgetCents,()=>{const v=prompt("Total budget in dollars (blank to clear)",filters.budgetCents?String(filters.budgetCents/100):"");if(v===null)return;set("budgetCents",v?Math.round(parseFloat(v)*100):undefined);if(!v)set("budgetPerPerson",undefined)}),
+    chip(filters.eventType?label(T.EVENT_TYPES,filters.eventType):"Occasion",!!filters.eventType,()=>{const keys=T.EVENT_TYPES.map(e=>e.key);const v=prompt("Occasion key: "+keys.join(", "),filters.eventType||"");if(v===null)return;set("eventType",keys.includes(v)?v:undefined)}),
+    chip("Standing",filters.format==="standing",()=>set("format",filters.format==="standing"?undefined:"standing")),
+    chip("Clear",false,()=>{const keep={city:"houston",neighborhood:filters.neighborhood,guests:filters.guests,date:filters.date,startTime:filters.startTime,sort:"relevance"};filters=keep;concierge=null;go(searchHref(filters))}),
+  ];
+  $("#r-filters").replaceChildren(...chips);
+  $("#r-sort").replaceChildren(...[["relevance","Best match"],["price_asc","Price \u2191"],["price_desc","Price \u2193"],["capacity","Capacity"]].map(([k,l])=>chip(l,(filters.sort||"relevance")===k,()=>set("sort",k))));
+  $("#r-list").innerHTML=results.length?results.slice(0,40).map(card).join(""):`<div class="empty card"><h2>No spaces match every filter</h2><p>Loosen privacy or budget, or clear filters.</p></div>`;
+  $("#r-nearby").innerHTML=nearby.length?`<div class="section"><h2>Nearby ${esc(hood.name)}</h2><p class="sub">Good matches a short drive away.</p>${nearby.map(card).join("")}</div>`:"";
+  $("#r-back").onclick=()=>go("#/");
+}
+function chip(text,on,fn){const b=document.createElement("button");b.type="button";b.className="chip"+(on?" on":"");b.textContent=text;b.onclick=fn;return b}
+function set(k,v){filters={...filters,[k]:v};if(k!=="sort")concierge=concierge;go(searchHref(filters))}
+function toggleArr(k,v){const cur=filters[k]||[];const next=cur.includes(v)?cur.filter(x=>x!==v):[...cur,v];set(k,next.length?next:undefined)}
+function card(item){
+  const s=item.space, est=item.estimate||RR.estimateSpend(s,filters.guests,8.25);
+  const pv=s.privacy?`<span class="badge ${s.privacy==="fully_private"||s.privacy==="buyout"?"sage":s.privacy==="semi_private"?"gold":""}">${esc(label(T.PRIVACY_LEVELS,s.privacy))}</span>`:`<span class="badge out">Privacy unknown</span>`;
+  const am=s.amenities.filter(a=>["av_equipment","tv","projector","screen","private_bar","wifi","separate_entrance"].includes(a)).slice(0,3).map(a=>`<span class="badge out">${esc(label(T.AMENITIES,a))}</span>`).join("");
+  const why=(item.reasons||[]).slice(0,2).map(r=>`<li>\u2713 ${esc(r)}</li>`).join("")+(item.warnings||[]).slice(0,1).map(w=>`<li class="warn">\u2022 ${esc(w)}</li>`).join("");
+  const inC=compare.includes(s.id);
+  return `<article class="card space">
+    <a class="img ${s.spaceType}" href="#/space/${s.slug}" aria-label="${esc(s.name)}"><span class="tag">${s.verificationStatus==="verified"?'<span>Verified</span>':""}${item.distanceMiles!=null&&item.distanceMiles>=0.15?`<span>~${item.distanceMiles.toFixed(1)} mi</span>`:""}</span>${s.photoUrl?"":'<span class="nophoto">No photo yet</span>'}</a>
+    <div class="body"><h3><a href="#/space/${s.slug}" style="text-decoration:none">${esc(s.name)}</a></h3><p class="rest">${esc(s.restaurantName)}${s.neighborhoodName?" \u00b7 "+esc(s.neighborhoodName):""} \u00b7 ${esc(label(T.SPACE_TYPES,s.spaceType))}</p>
+    <div class="kv"><div><small>Capacity</small><b>${esc(RR.formatCapacity(s.maxSeated,s.maxStanding,s.minGuests))}</b></div><div><small>Pricing</small><b>${esc(est.label)}</b></div></div>
+    <div class="badges">${pv}${am}</div>${why?`<ul class="why">${why}</ul>`:""}
+    <div class="actions"><button class="btn ghost sm" type="button" data-cmp="${s.id}">${inC?"\u2713 Comparing":"Compare"}</button><a class="btn dark sm" href="#/inquire?spaces=${s.slug}${filters.guests?"&guests="+filters.guests:""}">Help me book this</a></div></div></article>`;
+}
+document.addEventListener("click",e=>{const b=e.target.closest("[data-cmp]");if(!b)return;toggleCompare(b.dataset.cmp);b.textContent=compare.includes(b.dataset.cmp)?"\u2713 Comparing":"Compare"});
+function toggleCompare(id){if(compare.includes(id))compare=compare.filter(x=>x!==id);else if(compare.length>=4){toast("Compare up to 4 spaces");return}else compare.push(id);save("rr.compare",compare);updateCounts();toast(compare.includes(id)?`Added to compare (${compare.length})`:"Removed from compare")}
+function updateCounts(){const c=$("#n-ccount");c.hidden=!compare.length;c.textContent=compare.length;const r=$("#n-rcount");r.hidden=!requests.length;r.textContent=requests.length}
+
+/* ---------- detail ---------- */
+function conf(s,f){const c=s.confidence[f]||s.confidence["*"]||"unknown";return `<span class="conf ${c}">${{verified:"Verified",publicly_listed:"Listed",estimate:"Estimate",unknown:"Unknown"}[c]}</span>`}
+function renderDetail(slug){
+  const s=bySlug[slug];const v=$("#v-detail");
+  if(!s){v.innerHTML='<div class="empty"><h2>Space not found</h2></div>';return}
+  const guests=filters.guests||20;const est=roundEst(RR.estimateSpend(s,guests,8.25));
+  const prices=[];if(s.fbMinimumCents!=null)prices.push(["Food & beverage minimum",fmt(s.fbMinimumCents),"fbMinimumCents"]);if(s.roomFeeCents!=null)prices.push(["Room fee",fmt(s.roomFeeCents),"roomFeeCents"]);
+  if(s.estPerPersonLowCents!=null)prices.push(["Per person",s.estPerPersonHighCents&&s.estPerPersonHighCents!==s.estPerPersonLowCents?`${fmt(s.estPerPersonLowCents)}\u2013${fmt(s.estPerPersonHighCents)}`:fmt(s.estPerPersonLowCents),"estPerPersonLowCents"]);
+  if(s.depositCents!=null)prices.push(["Deposit",fmt(s.depositCents),"depositCents"]);if(s.serviceChargePct!=null)prices.push(["Service charge",s.serviceChargePct+"%","serviceChargePct"]);if(s.taxPct!=null)prices.push(["Tax",s.taxPct+"%","taxPct"]);
+  const inC=compare.includes(s.id);
+  v.innerHTML=`<div class="top"><button class="back" type="button" onclick="history.back()">\u2190 Back</button><a class="brand" href="#/"><i></i></a></div>
+  <div class="badges" style="margin:0"><span class="badge out">${esc(label(T.SPACE_TYPES,s.spaceType))}</span>${s.privacy?`<span class="badge ${s.privacy==="fully_private"||s.privacy==="buyout"?"sage":"gold"}">${esc(label(T.PRIVACY_LEVELS,s.privacy))}</span>`:'<span class="badge out">Privacy unknown</span>'}<span class="badge ${s.verificationStatus==="verified"?"sage":""}">${s.verificationStatus==="verified"?"Verified by Red Rope":s.verificationStatus==="publicly_listed"?"From restaurant listing":"Unverified"}</span></div>
+  <h1>${esc(s.name)}</h1><p class="rest">at <b>${esc(s.restaurantName)}</b>${s.neighborhoodName?" \u00b7 "+esc(s.neighborhoodName):""}${s.cuisines.length?" \u00b7 "+s.cuisines.map(c=>esc(label(T.CUISINES,c))).join(", "):""}</p>
+  <div class="card space" style="margin:0 0 12px"><div class="img ${s.spaceType}" style="height:170px">${s.photoUrl?"":'<span class="nophoto">No photo yet</span>'}</div></div>
+  <div class="facts"><div><small>Seated</small><b>${s.maxSeated!=null?(s.minGuests?s.minGuests+"\u2013":"up to ")+s.maxSeated:"?"}</b></div><div><small>Standing</small><b>${s.maxStanding!=null?"up to "+s.maxStanding:"?"}</b></div><div><small>Setting</small><b>${s.indoorOutdoor?esc(label(T.INDOOR_OUTDOOR,s.indoorOutdoor)):"?"}</b></div></div>
+  ${s.configurations&&s.configurations.length?`<div class="badges">${s.configurations.map(c=>`<span class="badge">${esc(c.name)}: ${c.seated!=null?c.seated+" seated":""}${c.seated!=null&&c.standing!=null?" \u00b7 ":""}${c.standing!=null?c.standing+" standing":""}</span>`).join("")}</div>`:""}
+  <div class="block"><h2>Pricing</h2>${prices.length?prices.map(([l,val,f])=>`<div class="price"><span class="lbl">${l}${conf(s,f)}</span><b>${val}</b></div>`).join(""):'<p>Not yet documented. Red Rope confirms minimums, fees and deposits with the restaurant when you inquire.</p>'}
+    ${s.daypartMinimums&&s.daypartMinimums.length?`<div style="margin-top:8px;font-size:13px"><b>Minimum by day / time</b>${s.daypartMinimums.map(d=>`<div class="price" style="padding:4px 0"><span class="lbl">${esc(d.label)}</span><span>${fmt(d.amountCents)}</span></div>`).join("")}</div>`:""}
+    ${est.lowCents!=null?`<div class="est"><div class="lbl">Est. all-in for ${guests} guests</div><div class="big">${fmt(est.lowCents)}${est.highCents&&est.highCents!==est.lowCents?"\u2013"+fmt(est.highCents):""}</div><div style="text-align:right;font-size:12.5px;color:var(--ink2)">\u2248 ${fmt(est.perPersonLowCents)} per person</div><details><summary>Assumptions</summary>${est.assumptions.map(a=>`<div>\u2022 ${esc(a)}</div>`).join("")}</details></div>`:""}
+    ${s.pricingNotes?`<p style="margin-top:8px;font-size:13px">${esc(s.pricingNotes)}</p>`:""}${s.cancellationPolicy?`<p style="margin-top:6px;font-size:13px"><b>Cancellation:</b> ${esc(s.cancellationPolicy)}</p>`:""}</div>
+  ${s.description?`<div class="block"><h2>About this space</h2><p>${esc(s.description)}</p></div>`:""}
+  <div class="block"><h2>Amenities</h2>${s.amenities.length?`<ul class="list">${s.amenities.map(a=>`<li>${esc(label(T.AMENITIES,a))}</li>`).join("")}</ul>`:'<p>Not yet documented \u2014 we confirm with the restaurant when you inquire.</p>'}${s.hasValet?'<p style="margin-top:6px">Valet available.</p>':""}${s.isWheelchairAccessible===true?'<p style="margin-top:6px">Wheelchair accessible.</p>':""}</div>
+  <div class="block"><h2>Good to know</h2><dl class="dl"><dt>Availability</dt><dd>${s.availabilityMode==="rules"?"Known event days":"Confirmed on request"}${s.availabilityNotes?" \u2014 "+esc(s.availabilityNotes):""}</dd><dt>Time limit</dt><dd>${s.maxDurationMinutes?s.maxDurationMinutes/60+" hours":"Not specified"}</dd><dt>Outside cake</dt><dd>${esc(s.outsideCakePolicy||"Ask us")}</dd><dt>Suited for</dt><dd>${s.suitableFor.length?s.suitableFor.map(k=>esc(label(T.EVENT_TYPES,k))).join(", "):"Any group occasion"}</dd><dt>Address</dt><dd>${esc(s.address||"Not listed")}</dd>${s.menus.length?`<dt>Menus</dt><dd>${s.menus.map(m=>`<a href="${esc(m.url)}" target="_blank" rel="noreferrer">${esc(m.title)}</a>`).join("<br>")}</dd>`:""}</dl></div>
+  <div class="block"><h2>Where this comes from</h2><p>Sources: ${s.sources.map(x=>esc(label(T.SOURCE_TYPES,x))).join(", ")||"Red Rope research"}.${s.lastVerifiedAt?` Last reviewed ${RR.formatDate(s.lastVerifiedAt)}.`:""} Anything uncertain is checked with the restaurant before you commit.</p></div>
+  <div class="sticky"><button class="btn ghost" type="button" data-cmp="${s.id}">${inC?"\u2713 Comparing":"Compare"}</button><a class="btn primary" href="#/inquire?spaces=${s.slug}${filters.guests?"&guests="+filters.guests:""}">Help me book this</a></div>`;
+}
+
+/* ---------- compare ---------- */
+function renderCompare(){
+  const items=compare.map(id=>byId[id]).filter(Boolean);$("#c-count").textContent=`${items.length}/4`;
+  if(items.length<2){$("#c-body").innerHTML=`<div class="empty card"><h2>Pick at least two spaces</h2><p>Tap Compare on any space card.</p><a class="btn dark sm" href="#/search" style="margin-top:12px">Browse spaces</a></div>`;return}
+  const g=filters.guests||20;
+  const rows=[["Restaurant",s=>esc(s.restaurantName)],["Neighborhood",s=>esc(s.neighborhoodName||"\u2014")],["Seated",s=>s.maxSeated!=null?(s.minGuests?s.minGuests+"\u2013":"up to ")+s.maxSeated:"?"],["Standing",s=>s.maxStanding!=null?"up to "+s.maxStanding:"?"],["Privacy",s=>esc(label(T.PRIVACY_LEVELS,s.privacy)||"Unknown")],["F&B minimum",s=>s.fbMinimumCents!=null?fmt(s.fbMinimumCents):"\u2014"],["Room fee",s=>s.roomFeeCents!=null?fmt(s.roomFeeCents):"\u2014"],["Per person",s=>s.estPerPersonLowCents!=null?fmt(s.estPerPersonLowCents)+(s.estPerPersonHighCents&&s.estPerPersonHighCents!==s.estPerPersonLowCents?"\u2013"+fmt(s.estPerPersonHighCents):""):"\u2014"],[`Est. all-in (${g})`,s=>{const e=roundEst(RR.estimateSpend(s,g,8.25));return e.lowCents!=null?`<b>${fmt(e.lowCents)}</b><br><small>\u2248 ${fmt(e.perPersonLowCents)}/pp \u00b7 estimate</small>`:"On request"}],["Cuisine",s=>s.cuisines.map(c=>esc(label(T.CUISINES,c))).join(", ")||"\u2014"],["AV",s=>s.amenities.filter(a=>T.AV_AMENITIES.includes(a)).map(a=>esc(label(T.AMENITIES,a))).join(", ")||"Not listed"],["Parking",s=>[s.hasValet?"Valet":null,s.hasParkingLot?"Lot":null,...s.amenities.filter(a=>T.PARKING_AMENITIES.includes(a)).map(a=>label(T.AMENITIES,a))].filter(Boolean).join(", ")||"Not listed"],["Availability",s=>s.availabilityMode==="rules"?"Known event days":"On request"],["Verification",s=>s.verificationStatus.replace(/_/g," ")],["Completeness",s=>s.completenessScore+"%"]];
+  $("#c-body").innerHTML=`<div class="compare"><table><thead><tr><th></th>${items.map(s=>`<th><a href="#/space/${s.slug}" style="text-decoration:none">${esc(s.name)}</a><br><button class="chip" type="button" data-cmp="${s.id}" style="margin-top:6px">Remove</button></th>`).join("")}</tr></thead><tbody>${rows.map(([l,f])=>`<tr><th>${l}</th>${items.map(s=>`<td>${f(s)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>
+  <a class="btn primary block" style="margin-top:14px" href="#/inquire?spaces=${items.map(s=>s.slug).join(",")}${filters.guests?"&guests="+filters.guests:""}">Help me book one of these</a>`;
+  $$("#c-body [data-cmp]").forEach(b=>b.addEventListener("click",()=>setTimeout(renderCompare,0)));
+}
+
+/* ---------- inquire ---------- */
+function renderInquire(p){
+  const slugs=(p.get("spaces")||"").split(",").filter(Boolean);const items=slugs.map(s=>bySlug[s]).filter(Boolean);const v=$("#v-inquire");
+  if(!items.length){v.innerHTML=`<div class="empty card" style="margin-top:20px"><h2>Pick a space first</h2><a class="btn dark sm" href="#/search" style="margin-top:12px">Browse spaces</a></div>`;return}
+  const opt=(o,sel)=>o.map(x=>`<option value="${x.key}"${sel===x.key?" selected":""}>${esc(x.label)}</option>`).join("");
+  v.innerHTML=`<div class="top"><button class="back" type="button" onclick="history.back()">\u2190 Back</button></div><p class="pill" style="display:inline-block">Booking request</p><h1 style="font-size:28px;margin-top:6px">Tell us about your event</h1><p style="color:var(--ink2);margin:6px 0 12px">We contact the restaurant${items.length>1?"s":""} for you and come back with availability and pricing. Free for you.</p>
+  <div class="card" style="padding:10px 12px;margin-bottom:12px"><b style="font-size:13px">Spaces to pursue</b>${items.map((s,i)=>`<label style="display:flex;gap:8px;align-items:center;padding:6px 0;font-size:14px"><input type="checkbox" name="inc" value="${s.slug}" checked> <span>${esc(s.name)} <span style="color:var(--ink2)">\u00b7 ${esc(s.restaurantName)}</span></span><input type="radio" name="fav" value="${s.slug}" ${i===0?"checked":""} title="favorite" style="margin-left:auto"></label>`).join("")}<small style="color:var(--ink3)">Check to include \u00b7 radio marks your favorite</small></div>
+  <form class="card form" id="f-inq">
+    <div class="row2"><div class="field"><label for="i-event">Occasion</label><select id="i-event"><option value="">Choose one</option>${opt(T.EVENT_TYPES,filters.eventType)}</select></div><div class="field"><label for="i-guests">Guests</label><input id="i-guests" type="number" inputmode="numeric" min="1" required value="${p.get("guests")||filters.guests||""}"></div></div>
+    <div class="row2"><div class="field"><label for="i-date">Date</label><input id="i-date" type="date" value="${filters.date||""}"></div><div class="field"><label for="i-time">Start time</label><input id="i-time" type="time" step="900" value="${filters.startTime||""}"></div></div>
+    <div class="row2"><div class="field"><label for="i-flex">Time range</label><input id="i-flex" placeholder="6\u20138 PM works"></div><div class="field"><label for="i-dur">Duration</label><select id="i-dur"><option value="">Not sure</option><option value="90">1.5 h</option><option value="120">2 h</option><option value="180">3 h</option><option value="240">4 h</option></select></div></div>
+    <div class="row2"><div class="field"><label for="i-budget">Budget ($)</label><input id="i-budget" type="number" inputmode="decimal" min="0" placeholder="3000" value="${filters.budgetCents?filters.budgetCents/100:""}"></div><div class="field"><label for="i-pp">Budget is</label><select id="i-pp"><option value="total"${filters.budgetPerPerson?"":" selected"}>Total</option><option value="pp"${filters.budgetPerPerson?" selected":""}>Per person</option></select></div></div>
+    <div class="field"><label for="i-priv">Privacy</label><select id="i-priv"><option value="">No preference</option>${opt(T.PRIVACY_LEVELS,(filters.privacy||[])[0])}</select></div>
+    <div class="field"><label for="i-av">AV needs</label><input id="i-av" placeholder="Screen, mic, slideshow\u2026" value="${filters.displayRequired?"Screen for a presentation":""}"></div>
+    <div class="field"><label for="i-food">Food & dietary</label><input id="i-food" placeholder="Family style, vegetarian options\u2026"></div>
+    <div class="field"><label for="i-notes">Anything else</label><textarea id="i-notes" rows="2" placeholder="Cake, decor, a toast, parking\u2026"></textarea></div>
+    <div class="row2"><div class="field"><label for="i-name">Name</label><input id="i-name" required autocomplete="name"></div><div class="field"><label for="i-phone">Phone</label><input id="i-phone" type="tel" autocomplete="tel"></div></div>
+    <div class="field"><label for="i-email">Email</label><input id="i-email" type="email" required autocomplete="email"></div>
+    <button class="btn primary block" type="submit" id="i-go">Send to Red Rope</button>
+    <p style="margin:0;font-size:12px;color:var(--ink3)">Prototype: requests are saved to this page's shared store so the Red Rope team can see them, and kept on this phone.</p>
+  </form>`;
+  $("#f-inq").onsubmit=async e=>{e.preventDefault();
+    const inc=$$('input[name="inc"]:checked',v).map(x=>x.value);if(!inc.length){toast("Pick at least one space");return}
+    const fav=($('input[name="fav"]:checked',v)||{}).value;
+    const b=parseFloat($("#i-budget").value);
+    const req={id:"rr-"+Date.now().toString(36)+Math.random().toString(36).slice(2,6),number:requests.length+1,createdAt:new Date().toISOString(),status:"submitted",
+      contactName:$("#i-name").value.trim(),contactEmail:$("#i-email").value.trim(),contactPhone:$("#i-phone").value.trim()||null,
+      eventType:$("#i-event").value||null,guestCount:parseInt($("#i-guests").value,10),eventDate:$("#i-date").value||null,startTime:$("#i-time").value||null,timeFlexibility:$("#i-flex").value||null,durationMinutes:parseInt($("#i-dur").value,10)||null,
+      budgetCents:isFinite(b)&&b>0?Math.round(b*100):null,budgetIsPerPerson:$("#i-pp").value==="pp",privacyRequirement:$("#i-priv").value||null,avRequirements:$("#i-av").value||null,foodPreferences:$("#i-food").value||null,specialRequests:$("#i-notes").value||null,
+      candidates:inc.map((slug,i)=>({slug,spaceId:bySlug[slug].id,name:bySlug[slug].name,restaurantName:bySlug[slug].restaurantName,isPreferred:slug===fav,status:"not_contacted"})),source:"mobile-prototype"};
+    const btn=$("#i-go");btn.disabled=true;btn.innerHTML='<span class="spin"></span> Sending\u2026';
+    let shared=false;try{const db=await dbp;if(db){await db.collection("inquiries").doc(req.id).set(req);shared=true}}catch(err){}
+    requests.unshift({...req,shared});save("rr.requests",requests);updateCounts();
+    toast(shared?"Sent to Red Rope":"Saved on this phone");go("#/requests");
+  };
+}
+
+/* ---------- requests ---------- */
+function renderRequests(){
+  const b=$("#q-body");
+  if(!requests.length){b.innerHTML=`<div class="empty card"><h2>No requests yet</h2><p>Find a space and tap \u201cHelp me book this\u201d.</p><a class="btn dark sm" href="#/search" style="margin-top:12px">Browse spaces</a></div>`;return}
+  const STEPS=["Received","Contacting venues","Options ready","You chose","Booked"];
+  b.innerHTML=requests.map(r=>`<article class="card" style="padding:14px;margin-bottom:10px"><div style="display:flex;justify-content:space-between;gap:8px;align-items:baseline"><b style="font-size:17px;font-family:Fraunces,Georgia,serif;font-weight:500">${esc(label(T.EVENT_TYPES,r.eventType)||"Group event")} for ${r.guestCount}</b><span class="badge gold">${r.shared?"Received \u2014 we're on it":"Saved locally"}</span></div>
+    <small style="color:var(--ink2)">Request #${r.number} \u00b7 ${r.eventDate?RR.formatDate(r.eventDate,{weekday:"short"}):"Date flexible"}${r.startTime?" at "+RR.formatTime(r.startTime):""}${r.budgetCents?" \u00b7 "+fmt(r.budgetCents)+(r.budgetIsPerPerson?"/pp":""):""}</small>
+    <div class="progress">${STEPS.map((s,i)=>`<div class="${i===0?"done":""}"><i></i>${s}</div>`).join("")}</div>
+    <div class="list" style="margin-top:4px">${r.candidates.map(c=>`<div style="display:flex;justify-content:space-between;font-size:14px"><span>${esc(c.name)} <span style="color:var(--ink2)">\u00b7 ${esc(c.restaurantName)}</span>${c.isPreferred?' <span class="badge rope" style="font-size:10px">favorite</span>':""}</span><span class="badge out">Queued</span></div>`).join("")}</div>
+    <p style="margin:10px 0 0;font-size:13px;color:var(--ink2)">Red Rope contacts each venue, confirms availability and pricing, and posts normalized options here.</p></article>`).join("");
+}
+
+/* ---------- boot ---------- */
+async function boot(){
+  const res=await fetch("spaces.json");DATA=await res.json();
+  DATA.spaces.forEach(s=>{byId[s.id]=s;bySlug[s.slug]=s});
+  initHome();updateCounts();route();
+  window.addEventListener("hashchange",route);
+  $$(".nav button").forEach(b=>b.onclick=()=>go(b.dataset.nav));
+  dbp=(window.claude&&claude.use)?claude.use("db").catch(()=>null):Promise.resolve(null);
+  $("#ask-note").textContent="Interpreted by Claude when available; otherwise a rule-based parser runs on your phone.";
+}
+boot();
+})();
+</script>
