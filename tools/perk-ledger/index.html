@@ -1,0 +1,600 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>
+<title>Perk Ledger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#EDF0F2; --surface:#FFFFFF; --surface-2:#F5F7F8; --ink:#16202A; --muted:#5B6875; --line:#D6DDE3;
+  --accent:#9A6A17; --accent-soft:#F4E9D3;
+  --good:#2E7D5B; --good-soft:#DDEFE6; --warn:#A8521F; --warn-soft:#F7E4D7; --crit:#B3261E; --crit-soft:#F6DCDA;
+  --bar:#E3E8EC;
+  --c-csr:#1E2A45; --c-amex:#9AA4AD; --c-ual:#1B3E8A; --c-vent:#0E4B5D;
+  --display:"Familjen Grotesk","Helvetica Neue",Arial,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0F1418; --surface:#172027; --surface-2:#1C262E; --ink:#E6ECF0; --muted:#95A3AF; --line:#28343D;
+    --accent:#D9A441; --accent-soft:#3A2F1B;
+    --good:#5CC393; --good-soft:#193329; --warn:#E5905A; --warn-soft:#3A2519; --crit:#F0766D; --crit-soft:#3C1D1B;
+    --bar:#26313A;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0F1418; --surface:#172027; --surface-2:#1C262E; --ink:#E6ECF0; --muted:#95A3AF; --line:#28343D;
+  --accent:#D9A441; --accent-soft:#3A2F1B;
+  --good:#5CC393; --good-soft:#193329; --warn:#E5905A; --warn-soft:#3A2519; --crit:#F0766D; --crit-soft:#3C1D1B;
+  --bar:#26313A;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 var(--body);margin:0}
+.wrap{max-width:1060px;margin:0 auto;padding-inline:16px;padding-block:28px 64px;display:grid;gap:28px}
+h1,h2,h3{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:34px;font-weight:700;letter-spacing:-.01em}
+h2{font-size:22px;font-weight:600}
+h3{font-size:15px;font-weight:600;font-family:var(--body)}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);font-weight:600}
+.muted{color:var(--muted)}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+header.top{display:flex;flex-wrap:wrap;gap:12px 24px;align-items:flex-end;justify-content:space-between}
+header.top p{margin:4px 0 0;color:var(--muted)}
+.save-state{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.dot.on{background:var(--good)}
+
+.summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+.summary > div{background:var(--surface);padding:16px 18px;display:grid;gap:4px}
+.summary .big{font-family:var(--mono);font-size:26px;font-weight:500;font-variant-numeric:tabular-nums}
+.summary .sub{font-size:13px;color:var(--muted)}
+
+.urgent{display:grid;gap:10px}
+.urgent-head{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.urgent-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.u-item{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--warn);border-radius:8px;padding:12px 14px;display:grid;gap:6px}
+.u-item.crit{border-left-color:var(--crit)}
+.u-item .row{display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.u-item .who{font-size:12px;color:var(--muted)}
+.empty-note{color:var(--muted);font-size:14px;padding:12px 0}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between}
+.tabs{display:flex;flex-wrap:wrap;gap:6px}
+.tab{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:13px}
+.tab[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.check{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
+
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.card-head{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center;padding:16px 18px;border-bottom:1px solid var(--line)}
+.chip-card{width:52px;height:34px;border-radius:5px;position:relative;box-shadow:inset 0 0 0 1px rgba(255,255,255,.15)}
+.chip-card::after{content:"";position:absolute;left:7px;top:11px;width:10px;height:8px;border-radius:2px;background:linear-gradient(135deg,#E9C77B,#B8923E)}
+.card-head .meta{font-size:13px;color:var(--muted)}
+.feebar{display:grid;gap:4px;min-width:170px;justify-items:end}
+.feebar .track{width:170px;height:6px;border-radius:3px;background:var(--bar);overflow:hidden}
+.feebar .fill{height:100%;background:var(--accent)}
+.feebar .t{font-size:12px;color:var(--muted)}
+.card-actions{display:flex;gap:6px}
+.linkbtn{background:none;border:0;padding:0;color:var(--accent);font-size:13px;font-weight:600}
+
+.benefits{display:grid}
+.b{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) 190px;gap:8px 18px;align-items:center;padding:14px 18px;border-bottom:1px solid var(--line)}
+.b:last-child{border-bottom:0}
+.b.done .b-name{color:var(--muted)}
+.b-name{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px}
+.b-note{font-size:12.5px;color:var(--muted);margin-top:2px}
+.pill{font-size:11px;font-weight:600;letter-spacing:.03em;border-radius:999px;padding:1px 8px;white-space:nowrap}
+.pill.cad{background:var(--surface-2);color:var(--muted);border:1px solid var(--line)}
+.pill.good{background:var(--good-soft);color:var(--good)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.crit{background:var(--crit-soft);color:var(--crit)}
+.pill.verify{background:var(--accent-soft);color:var(--accent)}
+button.pill{border:0}
+.b-prog{display:grid;gap:4px}
+.b-prog .nums{display:flex;justify-content:space-between;font-size:13px;gap:8px}
+.b-prog .track{height:6px;border-radius:3px;background:var(--bar);overflow:hidden}
+.b-prog .fill{height:100%;background:var(--good)}
+.b-prog .when{font-size:12px;color:var(--muted)}
+.b-act{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:5px 10px;font-size:13px}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.ghost{border-color:transparent;color:var(--muted)}
+.log{display:flex;gap:6px;align-items:center}
+.log input{width:84px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--surface-2);font-family:var(--mono)}
+
+.perks{display:flex;flex-wrap:wrap;gap:6px;padding:12px 18px;background:var(--surface-2);border-top:1px solid var(--line);align-items:center}
+.perks .label{margin-right:4px}
+
+.edit{padding:14px 18px;background:var(--surface-2);border-top:1px solid var(--line);display:grid;gap:14px}
+.edit-row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.edit input,.edit select{padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--surface)}
+.edit input.amt{width:90px;font-family:var(--mono)}
+.edit-table{display:grid;gap:6px}
+.edit-table .r{display:grid;grid-template-columns:minmax(0,1fr) 100px auto;gap:10px;align-items:center;font-size:14px}
+.add-form{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.add-form input[type=text]{flex:1 1 200px}
+
+footer{font-size:12.5px;color:var(--muted);max-width:70ch}
+
+@media (max-width:720px){
+  .b{grid-template-columns:1fr}
+  .b-act{justify-content:flex-start}
+  .card-head{grid-template-columns:auto 1fr}
+  .feebar{grid-column:1/-1;justify-items:start}
+  .feebar .track{width:100%}
+  .edit-table .r{grid-template-columns:1fr 90px}
+  .edit-table .r > :last-child{grid-column:1/-1}
+}
+@media (prefers-reduced-motion: no-preference){ .fill{transition:width .3s ease} }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1>Perk Ledger</h1>
+      <p id="today"></p>
+    </div>
+    <div class="save-state"><span class="dot" id="save-dot"></span><span id="save-text">Loading your saved data…</span></div>
+  </header>
+
+  <section class="summary" id="summary" aria-label="Summary"></section>
+
+  <section class="urgent" aria-labelledby="urgent-h">
+    <div class="urgent-head">
+      <h2 id="urgent-h">Use it or lose it</h2>
+      <span class="muted" style="font-size:13px">Credits with money left that reset soon</span>
+    </div>
+    <div class="urgent-list" id="urgent"></div>
+  </section>
+
+  <section style="display:grid;gap:14px" aria-label="Cards">
+    <div class="toolbar">
+      <div class="tabs" id="tabs" role="group" aria-label="Filter by card"></div>
+      <label class="check"><input type="checkbox" id="hide-done"> Hide credits I've used up</label>
+    </div>
+    <div id="cards" style="display:grid;gap:18px"></div>
+  </section>
+
+  <footer>
+    Credit amounts and terms reflect published card benefits as best known in 2026 and change often. Items marked <span class="pill verify">Verify</span> are the ones most likely to differ from your card's current terms. Use <b>Edit</b> on any card to change an amount, hide a credit, set the month you opened the card, or add a credit that's missing.
+  </footer>
+</div>
+
+<script>
+(() => {
+"use strict";
+
+// ---------- Card + benefit catalog ----------
+// cadence: monthly | quarterly | semiannual | annual | multi (years)
+// reset: calendar (Jan 1) | cardmember (anniversary month)
+const CARDS = [
+  { id:"csr",  name:"Chase Sapphire Reserve", fee:795, color:"var(--c-csr)", perks:["Priority Pass Select","IHG One Rewards Platinum","Apple TV+ & Apple Music","DashPass"] },
+  { id:"amex", name:"Amex Platinum", fee:895, color:"linear-gradient(135deg,#C9D0D6,#8C959D)", perks:["Centurion Lounges","Delta Sky Club (on Delta flights)","Hilton Gold","Marriott Gold","Fine Hotels + Resorts"] },
+  { id:"ual",  name:"United Club Infinite", fee:695, color:"var(--c-ual)", perks:["United Club membership","Premier Access","2 free checked bags","Premier status boost (PQP)"] },
+  { id:"vent", name:"Capital One Venture", fee:95, color:"var(--c-vent)", perks:["2X miles on everything","Hertz Five Star","No foreign transaction fees"] },
+];
+
+const BENEFITS = [
+  // Chase Sapphire Reserve
+  { id:"csr-travel", card:"csr", name:"Annual travel credit", amount:300, cadence:"annual", reset:"cardmember", note:"Applies automatically to travel purchases." },
+  { id:"csr-edit", card:"csr", name:"The Edit hotel credit", amount:250, cadence:"semiannual", reset:"calendar", note:"Prepaid 2+ night stay booked through Chase Travel (The Edit)." },
+  { id:"csr-hotel", card:"csr", name:"Select hotel credit", amount:250, cadence:"annual", reset:"calendar", verify:true, note:"Prepaid Chase Travel stay with IHG, Montage, Pendry, Omni, Virgin, Minor or Pan Pacific." },
+  { id:"csr-dining", card:"csr", name:"Exclusive Tables dining", amount:150, cadence:"semiannual", reset:"calendar", note:"Sapphire Reserve Exclusive Tables restaurants on OpenTable." },
+  { id:"csr-stubhub", card:"csr", name:"StubHub / viagogo", amount:150, cadence:"semiannual", reset:"calendar", enroll:true, note:"Requires activation." },
+  { id:"csr-doordash", card:"csr", name:"DoorDash promos", amount:25, cadence:"monthly", reset:"calendar", enroll:true, note:"$5 restaurant + two $10 grocery/retail promos. Needs DashPass." },
+  { id:"csr-lyft", card:"csr", name:"Lyft credit", amount:10, cadence:"monthly", reset:"calendar", note:"In-app credit, card set as Lyft payment." },
+  { id:"csr-peloton", card:"csr", name:"Peloton membership", amount:10, cadence:"monthly", reset:"calendar", enroll:true },
+  { id:"csr-ge", card:"csr", name:"Global Entry / TSA PreCheck / NEXUS", amount:120, cadence:"multi", years:4 },
+
+  // Amex Platinum
+  { id:"amex-hotel", card:"amex", name:"FHR / Hotel Collection credit", amount:300, cadence:"semiannual", reset:"calendar", note:"Prepaid stay through Amex Travel. Hotel Collection needs 2+ nights." },
+  { id:"amex-resy", card:"amex", name:"Resy restaurants", amount:100, cadence:"quarterly", reset:"calendar", enroll:true },
+  { id:"amex-lulu", card:"amex", name:"lululemon", amount:75, cadence:"quarterly", reset:"calendar", enroll:true, note:"U.S. stores and lululemon.com." },
+  { id:"amex-ent", card:"amex", name:"Digital entertainment", amount:25, cadence:"monthly", reset:"calendar", enroll:true, note:"Disney+, Hulu, ESPN+, Peacock, NYT, WSJ, YouTube Premium and others." },
+  { id:"amex-uber", card:"amex", name:"Uber Cash", amount:15, decAmount:35, cadence:"monthly", reset:"calendar", note:"$15 a month, $35 in December. Card must be in the Uber app." },
+  { id:"amex-walmart", card:"amex", name:"Walmart+ membership", amount:12.95, cadence:"monthly", reset:"calendar", note:"Monthly Walmart+ fee paid with the card." },
+  { id:"amex-airline", card:"amex", name:"Airline fee credit", amount:200, cadence:"annual", reset:"calendar", enroll:true, note:"Incidental fees on the one airline you select." },
+  { id:"amex-equinox", card:"amex", name:"Equinox", amount:300, cadence:"annual", reset:"calendar", enroll:true },
+  { id:"amex-clear", card:"amex", name:"CLEAR+", amount:209, cadence:"annual", reset:"calendar" },
+  { id:"amex-oura", card:"amex", name:"Oura Ring", amount:200, cadence:"annual", reset:"calendar", enroll:true },
+  { id:"amex-uberone", card:"amex", name:"Uber One membership", amount:120, cadence:"annual", reset:"calendar", enroll:true },
+  { id:"amex-ge", card:"amex", name:"Global Entry / TSA PreCheck", amount:120, cadence:"multi", years:4 },
+
+  // United Club Infinite
+  { id:"ual-hotels", card:"ual", name:"United Hotels credit", amount:75, cadence:"semiannual", reset:"calendar", verify:true, note:"Prepaid stay booked through United Hotels." },
+  { id:"ual-instacart", card:"ual", name:"Instacart", amount:20, cadence:"monthly", reset:"calendar", verify:true, enroll:true, note:"Needs Instacart+." },
+  { id:"ual-rideshare", card:"ual", name:"Rideshare credit", amount:12, cadence:"monthly", reset:"calendar", verify:true, enroll:true },
+  { id:"ual-ge", card:"ual", name:"Global Entry / TSA PreCheck / NEXUS", amount:120, cadence:"multi", years:4 },
+
+  // Capital One Venture
+  { id:"vent-ge", card:"vent", name:"Global Entry / TSA PreCheck", amount:120, cadence:"multi", years:4 },
+  { id:"vent-lounge", card:"vent", name:"Lounge visits", amount:2, unit:"visits", cadence:"annual", reset:"calendar", verify:true, note:"Capital One Lounge or Plaza Premium visits." },
+];
+
+const CADENCE_LABEL = { monthly:"Monthly", quarterly:"Quarterly", semiannual:"Every 6 months", annual:"Yearly", multi:"Every 4 years" };
+const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+const PERIODS_PER_YEAR = { monthly:12, quarterly:4, semiannual:2, annual:1 };
+
+// ---------- State ----------
+const state = {
+  usage: {},             // key -> {b, p, used, year, at}
+  config: { anniv:{}, overrides:{}, enrolled:{}, custom:[] },
+  filter: "all",
+  hideDone: false,
+  editing: {},           // cardId -> bool
+  logging: null,         // benefit id with open log input
+};
+
+const now = new Date();
+const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+
+// ---------- Persistence ----------
+let db = null;
+const LS_KEY = "perk-ledger-v1";
+function lsRead(){ try { return JSON.parse(localStorage.getItem(LS_KEY) || "null"); } catch { return null; } }
+function lsWrite(){ try { localStorage.setItem(LS_KEY, JSON.stringify({usage:state.usage, config:state.config})); } catch {} }
+
+const writeChains = {};
+function serial(key, fn){
+  const prev = writeChains[key] || Promise.resolve();
+  const next = prev.then(fn, fn).catch(err => { console.error(err); setSave(false, "Couldn't save the last change. Try again."); });
+  writeChains[key] = next;
+  return next;
+}
+
+function saveUsage(key){
+  const doc = state.usage[key];
+  if (!db) { lsWrite(); return; }
+  serial("u:"+key, () => doc ? db.collection("usage").doc(key).set({...doc}) : db.collection("usage").doc(key).delete());
+}
+function saveConfig(){
+  if (!db) { lsWrite(); return; }
+  const snap = JSON.parse(JSON.stringify(state.config));
+  serial("config", () => db.doc("config/main").set(snap));
+}
+
+function setSave(on, text){
+  document.getElementById("save-dot").className = "dot" + (on ? " on" : "");
+  document.getElementById("save-text").textContent = text;
+}
+
+async function initStore(){
+  const local = lsRead();
+  if (local) { state.usage = local.usage || {}; state.config = {...state.config, ...(local.config || {})}; }
+  render();
+  let ns = null;
+  try { ns = window.claude && window.claude.use ? await window.claude.use("db") : null; } catch { ns = null; }
+  if (!ns) { setSave(false, "Saved in this browser only"); return; }
+  db = ns;
+  setSave(true, "Saved to your account");
+  db.collection("usage").onSnapshot(snap => {
+    const u = {};
+    snap.docs.forEach(d => { if (d.exists) u[d.id] = {...d.data()}; });
+    state.usage = u; render();
+  }, () => setSave(false, "Lost connection to saved data. Reload to reconnect."));
+  db.doc("config/main").onSnapshot(snap => {
+    if (snap.exists) { const c = snap.data(); state.config = { anniv:{...(c.anniv||{})}, overrides:JSON.parse(JSON.stringify(c.overrides||{})), enrolled:{...(c.enrolled||{})}, custom:JSON.parse(JSON.stringify(c.custom||[])) }; }
+    render();
+  }, () => {});
+}
+
+// ---------- Period math ----------
+function addMonths(d, n){ return new Date(d.getFullYear(), d.getMonth()+n, 1); }
+function period(b){
+  const y = today.getFullYear(), m = today.getMonth();
+  if (b.cadence === "multi") return { key:"multi", start:null, end:null };
+  if (b.cadence === "monthly") { const s = new Date(y,m,1); return { key:`${y}-${String(m+1).padStart(2,"0")}`, start:s, end:addMonths(s,1), year:y }; }
+  if (b.cadence === "quarterly") { const q = Math.floor(m/3); const s = new Date(y,q*3,1); return { key:`${y}-Q${q+1}`, start:s, end:addMonths(s,3), year:y }; }
+  if (b.cadence === "semiannual") { const h = m < 6 ? 0 : 1; const s = new Date(y,h*6,1); return { key:`${y}-H${h+1}`, start:s, end:addMonths(s,6), year:y }; }
+  if (b.reset === "cardmember") {
+    const a = (state.config.anniv[b.card] || 1) - 1;
+    const sy = m >= a ? y : y - 1;
+    const s = new Date(sy,a,1);
+    return { key:`CM${sy}`, start:s, end:new Date(sy+1,a,1), year:y };
+  }
+  const s = new Date(y,0,1); return { key:`${y}`, start:s, end:new Date(y+1,0,1), year:y };
+}
+const ukey = (b, p) => `${b.id}--${p.key}`;
+const daysBetween = (a, b) => Math.round((b - a) / 86400000);
+
+function allBenefits(){
+  const ov = state.config.overrides || {};
+  const list = BENEFITS.concat((state.config.custom || []).map(c => ({...c, custom:true})));
+  return list.map(b => {
+    const o = ov[b.id] || {};
+    return {...b, amount: o.amount != null ? o.amount : b.amount, hidden: !!o.hidden};
+  });
+}
+
+function status(b){
+  const p = period(b);
+  if (b.cadence === "multi") {
+    const doc = state.usage[ukey(b,p)];
+    if (doc && doc.at) {
+      const at = new Date(doc.at);
+      const renew = new Date(at.getFullYear()+(b.years||4), at.getMonth(), at.getDate());
+      if (renew > today) return { p, amount:b.amount, used:b.amount, remaining:0, renew, usedAt:at };
+    }
+    return { p, amount:b.amount, used:0, remaining:b.amount };
+  }
+  const amount = (b.decAmount && p.start.getMonth() === 11 && b.cadence === "monthly") ? b.decAmount : b.amount;
+  const doc = state.usage[ukey(b,p)];
+  const used = Math.min(amount, doc ? Number(doc.used) || 0 : 0);
+  const daysLeft = daysBetween(today, p.end);
+  return { p, amount, used, remaining: +(amount - used).toFixed(2), daysLeft };
+}
+
+function urgency(b, s){
+  if (b.cadence === "multi" || s.remaining <= 0) return null;
+  const limit = b.cadence === "monthly" ? 10 : 30;
+  if (s.daysLeft > limit) return null;
+  return s.daysLeft <= (b.cadence === "monthly" ? 4 : 10) ? "crit" : "warn";
+}
+
+// ---------- Formatting ----------
+const fmt$ = n => "$" + (Math.round(n*100)/100).toLocaleString(undefined, {minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits:2});
+const fmtAmt = (b, n) => b.unit === "visits" ? `${n} visit${n===1?"":"s"}` : fmt$(n);
+const fmtDate = d => d.toLocaleDateString(undefined, {month:"short", day:"numeric", year: d.getFullYear() !== today.getFullYear() ? "numeric" : undefined});
+const dayWord = n => n === 1 ? "1 day" : `${n} days`;
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const cardOf = id => CARDS.find(c => c.id === id);
+
+// ---------- Actions ----------
+function setUsed(b, value){
+  const s = status(b), p = s.p, key = ukey(b,p);
+  if (b.cadence === "multi") {
+    if (value > 0) state.usage[key] = { b:b.id, p:"multi", used:b.amount, year:today.getFullYear(), at:today.toISOString().slice(0,10) };
+    else delete state.usage[key];
+  } else {
+    const v = Math.max(0, Math.min(s.amount, value));
+    if (v > 0) state.usage[key] = { b:b.id, p:p.key, used:v, year:p.start.getFullYear(), at:today.toISOString().slice(0,10) };
+    else delete state.usage[key];
+  }
+  saveUsage(key);
+  render();
+}
+
+function capturedThisYear(cardId){
+  const y = today.getFullYear();
+  const byId = Object.fromEntries(allBenefits().map(b => [b.id, b]));
+  let total = 0;
+  for (const doc of Object.values(state.usage)) {
+    const b = byId[doc.b];
+    if (!b || b.unit === "visits" || (cardId && b.card !== cardId)) continue;
+    if (doc.year === y) total += Number(doc.used) || 0;
+  }
+  return total;
+}
+
+// ---------- Render ----------
+function render(){
+  document.getElementById("today").textContent = today.toLocaleDateString(undefined, {weekday:"long", month:"long", day:"numeric", year:"numeric"}) + " · 4 cards";
+  const list = allBenefits().filter(b => !b.hidden);
+  const rows = list.map(b => ({ b, s: status(b) }));
+
+  // Summary
+  const money = rows.filter(r => r.b.unit !== "visits" && r.b.cadence !== "multi");
+  const leftNow = money.reduce((t,r) => t + r.s.remaining, 0);
+  const openCount = money.filter(r => r.s.remaining > 0).length;
+  const urgentRows = rows.filter(r => urgency(r.b, r.s) && r.b.unit !== "visits");
+  const urgentAmt = urgentRows.reduce((t,r) => t + r.s.remaining, 0);
+  const captured = capturedThisYear();
+  const fees = CARDS.reduce((t,c) => t + c.fee, 0);
+  const annualPotential = list.filter(b => b.unit !== "visits" && PERIODS_PER_YEAR[b.cadence])
+    .reduce((t,b) => t + (b.decAmount ? b.amount*11 + b.decAmount : b.amount * PERIODS_PER_YEAR[b.cadence]), 0);
+  document.getElementById("summary").innerHTML = `
+    <div><span class="label">Left to use right now</span><span class="big num">${fmt$(leftNow)}</span><span class="sub">across ${openCount} open credit${openCount===1?"":"s"}</span></div>
+    <div><span class="label">Resetting soon</span><span class="big num" style="color:${urgentAmt?"var(--warn)":"inherit"}">${fmt$(urgentAmt)}</span><span class="sub">${urgentRows.length} credit${urgentRows.length===1?"":"s"} about to reset</span></div>
+    <div><span class="label">Captured in ${today.getFullYear()}</span><span class="big num">${fmt$(captured)}</span><span class="sub">vs ${fmt$(fees)} in annual fees</span></div>
+    <div><span class="label">Yearly credit value</span><span class="big num">${fmt$(annualPotential)}</span><span class="sub">if you use every recurring credit</span></div>`;
+
+  // Urgent list
+  const urg = rows.filter(r => urgency(r.b, r.s)).sort((a,b) => a.s.daysLeft - b.s.daysLeft);
+  document.getElementById("urgent").innerHTML = urg.length ? urg.map(({b,s}) => `
+    <div class="u-item ${urgency(b,s)}">
+      <div class="row"><h3>${esc(b.name)}</h3><span class="num">${fmtAmt(b, s.remaining)}</span></div>
+      <div class="row"><span class="who">${esc(cardOf(b.card).name)}</span><span class="pill ${urgency(b,s)}">${s.daysLeft <= 0 ? "Resets today" : "Resets in " + dayWord(s.daysLeft)}</span></div>
+      <div><button class="btn" data-act="full" data-id="${b.id}">Mark used</button></div>
+    </div>`).join("") : `<div class="empty-note">Nothing is about to reset with money left on it.</div>`;
+
+  // Tabs
+  const tabs = [{id:"all", name:"All cards"}].concat(CARDS.map(c => ({id:c.id, name:c.name})));
+  document.getElementById("tabs").innerHTML = tabs.map(t => `<button class="tab" data-tab="${t.id}" aria-pressed="${state.filter===t.id}">${esc(t.name)}</button>`).join("");
+  document.getElementById("hide-done").checked = state.hideDone;
+
+  // Cards
+  const cardsHtml = CARDS.filter(c => state.filter === "all" || state.filter === c.id).map(c => {
+    const all = allBenefits().filter(b => b.card === c.id);
+    const cr = rows.filter(r => r.b.card === c.id)
+      .filter(r => !(state.hideDone && r.s.remaining <= 0));
+    const cap = capturedThisYear(c.id);
+    const pct = Math.min(100, cap / c.fee * 100);
+    const anniv = state.config.anniv[c.id];
+    const hasCardmember = all.some(b => b.reset === "cardmember");
+    return `
+    <article class="card" id="card-${c.id}">
+      <div class="card-head">
+        <div class="chip-card" style="background:${c.color}" aria-hidden="true"></div>
+        <div>
+          <h2>${esc(c.name)}</h2>
+          <div class="meta"><span class="num">${fmt$(c.fee)}</span> annual fee${hasCardmember ? ` · card year starts ${anniv ? MONTHS[anniv-1] : "<b>Jan (set in Edit)</b>"}` : ""}
+            · <button class="linkbtn" data-act="edit" data-card="${c.id}">${state.editing[c.id] ? "Done editing" : "Edit"}</button></div>
+        </div>
+        <div class="feebar">
+          <span class="t"><span class="num">${fmt$(cap)}</span> of fee recovered in ${today.getFullYear()}</span>
+          <div class="track"><div class="fill" style="width:${pct}%"></div></div>
+        </div>
+      </div>
+      <div class="benefits">
+        ${cr.length ? cr.map(r => benefitRow(r.b, r.s)).join("") : `<div class="b"><span class="muted">Every credit on this card is used for now.</span></div>`}
+      </div>
+      <div class="perks"><span class="label">Also included</span>${c.perks.map(p => `<span class="pill cad">${esc(p)}</span>`).join("")}</div>
+      ${state.editing[c.id] ? editPanel(c, all) : ""}
+    </article>`;
+  }).join("");
+  document.getElementById("cards").innerHTML = cardsHtml;
+
+  if (state.logging) {
+    const inp = document.getElementById("log-" + state.logging);
+    if (inp && document.activeElement !== inp) inp.focus();
+  }
+}
+
+function benefitRow(b, s){
+  const u = urgency(b, s);
+  const done = s.remaining <= 0;
+  const pct = s.amount ? (s.used / s.amount * 100) : 0;
+  const enrolled = state.config.enrolled[b.id];
+  let when;
+  if (b.cadence === "multi") when = s.renew ? `Used ${fmtDate(s.usedAt)} · available again ${fmtDate(s.renew)}` : "Available now · no deadline";
+  else when = `Resets ${fmtDate(s.p.end)} (${dayWord(Math.max(0,s.daysLeft))})`;
+
+  const statePill = done ? `<span class="pill good">Used</span>` : u ? `<span class="pill ${u}">${s.daysLeft <= 0 ? "Resets today" : dayWord(s.daysLeft) + " left"}</span>` : "";
+  const enrollPill = b.enroll ? `<button class="pill ${enrolled ? "good" : "warn"}" data-act="enroll" data-id="${b.id}" title="Toggle enrollment">${enrolled ? "Enrolled" : "Needs enrollment"}</button>` : "";
+
+  let actions;
+  if (b.cadence === "multi") {
+    actions = done ? `<button class="btn ghost" data-act="clear" data-id="${b.id}">Undo</button>` : `<button class="btn primary" data-act="full" data-id="${b.id}">Mark used today</button>`;
+  } else if (state.logging === b.id) {
+    actions = `<form class="log" data-form="log" data-id="${b.id}">
+      <label class="label" for="log-${b.id}">${b.unit === "visits" ? "Visits" : "Add $"}</label>
+      <input id="log-${b.id}" type="number" min="0" step="${b.unit === "visits" ? 1 : 0.01}" inputmode="decimal" placeholder="${b.unit === "visits" ? "1" : s.remaining}">
+      <button class="btn primary" type="submit">Add</button>
+      <button class="btn ghost" type="button" data-act="cancel-log">Cancel</button>
+    </form>`;
+  } else {
+    actions = (done ? "" : `<button class="btn primary" data-act="full" data-id="${b.id}">Used all</button>
+      <button class="btn" data-act="log" data-id="${b.id}">${b.unit === "visits" ? "Log visit" : "Log part"}</button>`)
+      + (s.used > 0 ? `<button class="btn ghost" data-act="clear" data-id="${b.id}">Reset</button>` : "");
+  }
+
+  return `
+  <div class="b ${done ? "done" : ""}">
+    <div>
+      <div class="b-name"><h3>${esc(b.name)}</h3><span class="pill cad">${b.cadence === "multi" ? `Every ${b.years||4} years` : CADENCE_LABEL[b.cadence]}</span>${statePill}${enrollPill}${b.verify ? `<span class="pill verify" title="Check current terms with the issuer">Verify</span>` : ""}${b.custom ? `<span class="pill cad">Added by you</span>` : ""}</div>
+      ${b.note ? `<div class="b-note">${esc(b.note)}</div>` : ""}
+    </div>
+    <div class="b-prog">
+      <div class="nums"><span class="num">${fmtAmt(b, s.remaining)} left</span><span class="num muted">of ${fmtAmt(b, s.amount)}</span></div>
+      <div class="track"><div class="fill" style="width:${pct}%"></div></div>
+      <div class="when">${when}</div>
+    </div>
+    <div class="b-act">${actions}</div>
+  </div>`;
+}
+
+function editPanel(c, all){
+  const ov = state.config.overrides;
+  const hasCardmember = all.some(b => b.reset === "cardmember");
+  return `
+  <div class="edit">
+    ${hasCardmember ? `<div class="edit-row"><label for="anniv-${c.id}">Month you opened this card</label>
+      <select id="anniv-${c.id}" data-anniv="${c.id}">${MONTHS.map((m,i) => `<option value="${i+1}" ${(state.config.anniv[c.id]||1)===i+1?"selected":""}>${m}</option>`).join("")}</select>
+      <span class="muted" style="font-size:13px">Card-year credits reset in this month.</span></div>` : ""}
+    <div class="edit-table">
+      <span class="label">Credit amounts per period</span>
+      ${all.map(b => `<div class="r">
+        <label for="amt-${b.id}">${esc(b.name)} <span class="muted">· ${b.cadence === "multi" ? "every " + (b.years||4) + " yrs" : CADENCE_LABEL[b.cadence].toLowerCase()}</span></label>
+        <input class="amt" id="amt-${b.id}" type="number" min="0" step="0.01" value="${b.amount}" data-amt="${b.id}">
+        <div style="display:flex;gap:10px;align-items:center">
+          <label class="check"><input type="checkbox" data-hide="${b.id}" ${ov[b.id]?.hidden ? "checked" : ""}> Hide</label>
+          ${b.custom ? `<button class="btn ghost" data-act="remove-custom" data-id="${b.id}">Remove</button>` : ""}
+        </div>
+      </div>`).join("")}
+    </div>
+    <form class="add-form" data-form="add" data-card="${c.id}">
+      <span class="label" style="flex-basis:100%">Add a credit</span>
+      <input type="text" id="new-name-${c.id}" name="name" placeholder="Credit name" required aria-label="Credit name">
+      <input class="amt" type="number" id="new-amt-${c.id}" name="amount" min="0" step="0.01" placeholder="Amount" required aria-label="Amount" style="width:100px">
+      <select id="new-cad-${c.id}" name="cadence" aria-label="How often it resets">
+        <option value="monthly">Monthly</option><option value="quarterly">Quarterly</option><option value="semiannual">Every 6 months</option><option value="annual" selected>Yearly (Jan 1)</option><option value="cardmember">Yearly (card year)</option>
+      </select>
+      <button class="btn primary" type="submit">Add credit</button>
+    </form>
+  </div>`;
+}
+
+// ---------- Events ----------
+const find = id => allBenefits().find(b => b.id === id);
+
+document.addEventListener("click", e => {
+  const t = e.target.closest("[data-act],[data-tab]");
+  if (!t) return;
+  if (t.dataset.tab) { state.filter = t.dataset.tab; render(); return; }
+  const b = t.dataset.id ? find(t.dataset.id) : null;
+  switch (t.dataset.act) {
+    case "full": setUsed(b, status(b).amount); state.logging = null; break;
+    case "clear": setUsed(b, 0); break;
+    case "log": state.logging = b.id; render(); break;
+    case "cancel-log": state.logging = null; render(); break;
+    case "enroll":
+      state.config.enrolled[b.id] = !state.config.enrolled[b.id];
+      if (!state.config.enrolled[b.id]) delete state.config.enrolled[b.id];
+      saveConfig(); render(); break;
+    case "edit": state.editing[t.dataset.card] = !state.editing[t.dataset.card]; render(); break;
+    case "remove-custom":
+      state.config.custom = state.config.custom.filter(c => c.id !== b.id);
+      delete state.config.overrides[b.id];
+      saveConfig(); render(); break;
+  }
+});
+
+document.addEventListener("submit", e => {
+  const f = e.target.closest("form[data-form]");
+  if (!f) return;
+  e.preventDefault();
+  if (f.dataset.form === "log") {
+    const b = find(f.dataset.id);
+    const v = parseFloat(f.querySelector("input").value);
+    if (!isFinite(v) || v <= 0) return;
+    const s = status(b);
+    state.logging = null;
+    setUsed(b, s.used + v);
+  } else if (f.dataset.form === "add") {
+    const name = f.elements.name.value.trim();
+    const amount = parseFloat(f.elements.amount.value);
+    if (!name || !isFinite(amount)) return;
+    const cad = f.elements.cadence.value;
+    const id = "custom-" + f.dataset.card + "-" + Date.now().toString(36);
+    state.config.custom.push({ id, card:f.dataset.card, name, amount,
+      cadence: cad === "cardmember" ? "annual" : cad, reset: cad === "cardmember" ? "cardmember" : "calendar" });
+    saveConfig(); render();
+  }
+});
+
+document.addEventListener("change", e => {
+  const t = e.target;
+  if (t.id === "hide-done") { state.hideDone = t.checked; try { localStorage.setItem(LS_KEY+"-hide", t.checked ? "1" : ""); } catch {} render(); return; }
+  if (t.dataset.anniv) { state.config.anniv[t.dataset.anniv] = parseInt(t.value, 10); saveConfig(); render(); return; }
+  if (t.dataset.hide) {
+    const o = state.config.overrides[t.dataset.hide] || {};
+    o.hidden = t.checked; state.config.overrides[t.dataset.hide] = o; saveConfig(); render(); return;
+  }
+  if (t.dataset.amt) {
+    const v = parseFloat(t.value); if (!isFinite(v) || v < 0) return;
+    const id = t.dataset.amt;
+    const base = BENEFITS.find(b => b.id === id);
+    if (base) {
+      const o = state.config.overrides[id] || {};
+      if (v === base.amount) delete o.amount; else o.amount = v;
+      state.config.overrides[id] = o;
+    } else {
+      const c = state.config.custom.find(c => c.id === id); if (c) c.amount = v;
+    }
+    saveConfig(); render();
+  }
+});
+
+try { state.hideDone = localStorage.getItem(LS_KEY+"-hide") === "1"; } catch {}
+initStore();
+})();
+</script>
+
+</body></html>
